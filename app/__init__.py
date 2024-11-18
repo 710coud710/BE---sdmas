@@ -6,12 +6,17 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
 
-    app.config.from_object('config.Config')
+    app.config['SQLALCHEMY_DATABASE_URI'] = (
+        'mariadb+mariadbconnector://dbpgf29754552:Lam2409@'
+        'serverless-us-central1.sysp0000.db2.skysql.com:4000/sdmas_db'
+        '?ssl_verify_cert=True'
+    )
 
-    # Initialize database
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Tắt theo dõi thay đổi (optional)
+
     db.init_app(app)
 
-    # Register blueprints
+
     from app.controllers.API_auth import auth_bp
     from app.controllers.hello import hello_bp
 

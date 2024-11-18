@@ -1,12 +1,11 @@
-from urllib.parse import quote_plus
+# config.py
+import os
 
 class Config:
-    SECRET_KEY = 'bimatic'
-
-    password = quote_plus("*2:D0XqFk6Gqkqg-1glY")
-      
-    SQLALCHEMY_DATABASE_URI = (
-        f'mysql+pymysql://dbpgf20945856:{password}@serverless-us-central1.sysp0000.db2.skysql.com:4005/sdmas_db'
-        # f'mysql+pymysql://root:123@localhost:3306/sdmas_db'
-    )
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # Kết nối đến SkySQL
+    DB_HOST = os.getenv('DB_HOST', 'serverless-us-central1.sysp0000.db2.skysql.com')
+    DB_PORT = os.getenv('DB_PORT', 4005)
+    DB_USER = os.getenv('DB_USER', 'dbpgf20945856')
+    DB_PASSWORD = os.getenv('DB_PASSWORD', '*2:D0XqFk6Gqkqg-1glY')
+    DB_NAME = os.getenv('DB_NAME', 'sdmas_db')
+    DB_SSL_VERIFY = True

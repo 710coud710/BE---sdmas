@@ -1,22 +1,30 @@
-from sqlalchemy import create_engine
+import mariadb
+import sys
 
-# Đường dẫn đến file chứng chỉ SSL
-SSL_CERT = "certs/skysql_server_cert.pem"
+def test_db():
+    try:
+        conn = mariadb.connect(
+            host="serverless-us-central1.sysp0000.db2.skysql.com",
+            port=4000,
+            ssl_verify_cert=True,
+            user="dbpgf29754552",
+            password="Lam2409@"
+        )
+        print("Kết nối thành công tới cơ sở dữ liệu MariaDB!")
 
-# Chuỗi kết nối
-DB_URI = (
-    "mysql+pymysql://dbpgf20945856:*2:D0XqFk6Gqkqg-1glY"
-    "@serverless-us-central1.sysp0000.db2.skysql.com:4005/sdmas_db"
-    "?ssl_ca={}".format(SSL_CERT)
-)
+        #con trỏ 
+        cursor = conn.cursor()
 
-# Tạo engine SQLAlchemy
-engine = create_engine(DB_URI)
+        # Thực thi truy vấn
+        cursor.execute("SELECT * FROM members ")
+        result = cursor.fetchone()
+        print(f"Kết nối thành công: {result[0]}")
 
-# Kiểm tra kết nối
-try:
-    with engine.connect() as conn:
-        result = conn.execute("SELECT 1")
-        print("Kết nối thành công:", result.scalar())
-except Exception as e:
-    print("Lỗi kết nối:", e)
+        cursor.close()
+        conn.close()
+    except mariadb.Error as e:
+        print(f"Lỗi kết nối: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    test_db()
